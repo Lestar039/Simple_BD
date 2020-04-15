@@ -1,8 +1,10 @@
 my_bd = {}
-inner_dict = {}
+first_inner_dict = {}
 count_transaction = 0
+dict_controller = [my_bd]
 
 while True:
+    current_dict = dict_controller[-1]
     x = input()
     command = x.split(' ')[0]
 
@@ -12,38 +14,46 @@ while True:
 
     elif command == 'SET':
         if count_transaction == 1:
-            inner_dict[x.split(' ')[1]] = x.split(' ')[2]
+            first_inner_dict[x.split(' ')[1]] = x.split(' ')[2]
         else:
-            my_bd[x.split(' ')[1]] = x.split(' ')[2]
+            current_dict[x.split(' ')[1]] = x.split(' ')[2]
 
     elif command == 'GET':
         try:
-            print(my_bd[x.split(' ')[1]])
+            print(current_dict[x.split(' ')[1]])
         except KeyError:
             print('NULL')
 
     elif command == 'UNSET':
         try:
-            del my_bd[x.split(' ')[1]]
+            del current_dict[x.split(' ')[1]]
         except KeyError:
-            print(f"No value: \"{x.split(' ')[1]}\" in Base Date")
+            pass
 
-    elif command == 'COUNT':
+    elif command == 'COUNTS':
         counter = 0
-        for key, value in my_bd.items():
+        for key, value in current_dict.items():
             if value == x.split(' ')[1]:
                 counter += 1
         print(counter)
 
     elif command == 'BEGIN':
         count_transaction += 1
+        if count_transaction == 1:
+            dict_controller.append(first_inner_dict)
+        else:
+            new_dict = dict()
+            dict_controller.append(new_dict)
 
     elif command == 'ROLLBACK':
-        for key in inner_dict.keys():
-            my_bd[key] = inner_dict[key]
+        count_transaction = 0
+        dict_controller = dict_controller[:2]
 
     elif command == 'COMMIT':
-        count_transaction = 0
+        while len(dict_controller) > 1:
+            for key in dict_controller[-1].keys():
+                my_bd[key] = dict_controller[-1][key]
+            del dict_controller[-1]
 
     else:
         print('Wrong command')
