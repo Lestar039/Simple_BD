@@ -32,9 +32,10 @@ while True:
 
     elif command == 'COUNTS':
         counter = 0
-        for key, value in current_dict.items():
-            if value == x.split(' ')[1]:
-                counter += 1
+        for one_dict in dict_controller:
+            for key, value in current_dict.items():
+                if value == x.split(' ')[1]:
+                    counter += 1
         print(counter)
 
     elif command == 'BEGIN':
@@ -48,6 +49,8 @@ while True:
     elif command == 'ROLLBACK':
         count_transaction = 0
         dict_controller = dict_controller[:2]
+        if len(dict_controller[-1]) == 0:
+            del dict_controller[-1]
 
     elif command == 'COMMIT':
         while len(dict_controller) > 1:
