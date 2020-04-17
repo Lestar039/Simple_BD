@@ -23,10 +23,12 @@ while True:
 
     elif command == 'GET':
         try:
-            # print(current_dict[x.split(' ')[1]])
-            print(my_bd[x.split(' ')[1]])
+            print(current_dict[x.split(' ')[1]])
         except KeyError:
-            print('NULL')
+            try:
+                print(my_bd[x.split(' ')[1]])
+            except KeyError:
+                print('NULL')
         except IndexError:
             print('Wrong command! Use: GET VALUE')
 
@@ -63,10 +65,12 @@ while True:
             del dict_controller[-1]
 
     elif command == 'COMMIT':
-        while len(dict_controller) > 1:
-            for key in dict_controller[-1].keys():
-                my_bd[key] = dict_controller[-1][key]
-            del dict_controller[-1]
+        for key in dict_controller[-1].keys():
+            my_bd[key] = dict_controller[-1][key]
+            print(dict_controller)
+        dict_controller.clear()
+        dict_controller.append(my_bd)
+        print(my_bd)
 
     else:
         print('Wrong command! Use: SET, GET, UNSET, BEGIN, ROLLBACK, COMMIT, END')
