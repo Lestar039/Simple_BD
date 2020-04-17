@@ -55,13 +55,8 @@ while True:
 
     elif command == 'ROLLBACK':
         if count_transaction > 1:
-            # try:
-            print('до', dict_controller)
             del dict_controller[-1]
-            print('после', dict_controller)
             count_transaction -= 1
-            # except IndexError:
-            #     print('No one transaction now. Try BEGIN for start it')
         else:
             print('No one transaction now. Try BEGIN for start it')
 
@@ -69,6 +64,7 @@ while True:
         while len(dict_controller) > 1:
             my_bd.update(dict_controller[1])
             del dict_controller[1]
+        count_transaction = 0
 
     else:
         print('Wrong command! Use: SET, GET, UNSET, BEGIN, ROLLBACK, COMMIT, END')
