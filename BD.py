@@ -39,11 +39,14 @@ while True:
 
     elif command == 'COUNTS':
         counter = 0
-        for one_dict in dict_controller:
+        # for one_dict in dict_controller:
+        try:
             for key, value in current_dict.items():
                 if value == x.split(' ')[1]:
                     counter += 1
-        print(counter)
+            print(counter)
+        except IndexError:
+            print('Wrong command! Use: COUNTS KEY')
 
     elif command == 'BEGIN':
         count_transaction += 1
