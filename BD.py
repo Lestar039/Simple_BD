@@ -8,7 +8,6 @@ while True:
     command = x.split(' ')[0]
 
     if command == 'END':
-        count_transaction = 0
         break
 
     elif command == 'SET':
@@ -47,7 +46,7 @@ while True:
                     counter += 1
             print(counter)
         except IndexError:
-            print('Wrong command! Use: COUNTS KEY')
+            print('Wrong command! Use: COUNTS VALUE')
 
     elif command == 'BEGIN':
         count_transaction += 1
@@ -56,9 +55,14 @@ while True:
 
     elif command == 'ROLLBACK':
         if count_transaction > 1:
-            count_transaction -= 1
+            # try:
+            print('до', dict_controller)
             del dict_controller[-1]
-        elif count_transaction == 0:
+            print('после', dict_controller)
+            count_transaction -= 1
+            # except IndexError:
+            #     print('No one transaction now. Try BEGIN for start it')
+        else:
             print('No one transaction now. Try BEGIN for start it')
 
     elif command == 'COMMIT':
