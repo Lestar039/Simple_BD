@@ -13,22 +13,29 @@ while True:
         break
 
     elif command == 'SET':
-        if count_transaction == 1:
-            first_inner_dict[x.split(' ')[1]] = x.split(' ')[2]
-        else:
-            current_dict[x.split(' ')[1]] = x.split(' ')[2]
+        try:
+            if count_transaction == 1:
+                first_inner_dict[x.split(' ')[1]] = x.split(' ')[2]
+            else:
+                current_dict[x.split(' ')[1]] = x.split(' ')[2]
+        except IndexError:
+            print('Wrong command! Use: SET KEY VALUE')
 
     elif command == 'GET':
         try:
             print(current_dict[x.split(' ')[1]])
         except KeyError:
             print('NULL')
+        except IndexError:
+            print('Wrong command! Use: GET VALUE')
 
     elif command == 'UNSET':
         try:
             del current_dict[x.split(' ')[1]]
         except KeyError:
             pass
+        except IndexError:
+            print('Wrong command! Use: UNSET KEY')
 
     elif command == 'COUNTS':
         counter = 0
@@ -59,4 +66,4 @@ while True:
             del dict_controller[-1]
 
     else:
-        print('Wrong command')
+        print('Wrong command! Use: SET, GET, UNSET, BEGIN, ROLLBACK, COMMIT, END')
