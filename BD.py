@@ -1,5 +1,4 @@
 my_bd = {}
-first_inner_dict = {}
 count_transaction = 0
 dict_controller = [my_bd]
 
@@ -14,10 +13,7 @@ while True:
 
     elif command == 'SET':
         try:
-            if count_transaction == 1:
-                first_inner_dict[x.split(' ')[1]] = x.split(' ')[2]
-            else:
-                current_dict[x.split(' ')[1]] = x.split(' ')[2]
+            current_dict[x.split(' ')[1]] = x.split(' ')[2]
         except IndexError:
             print('Wrong command! Use: SET KEY VALUE')
 
@@ -36,14 +32,17 @@ while True:
         try:
             del current_dict[x.split(' ')[1]]
         except KeyError:
-            pass
+            try:
+                del my_bd[x.split(' ')[1]]
+            except IndexError:
+                pass
         except IndexError:
             print('Wrong command! Use: UNSET KEY')
 
     elif command == 'COUNTS':
         counter = 0
         try:
-            for key, value in current_dict.items():
+            for key, value in my_bd.items():
                 if value == x.split(' ')[1]:
                     counter += 1
             print(counter)
@@ -52,25 +51,20 @@ while True:
 
     elif command == 'BEGIN':
         count_transaction += 1
-        if count_transaction == 1:
-            dict_controller.append(first_inner_dict)
-        else:
-            new_dict = dict()
-            dict_controller.append(new_dict)
+        new_dict = dict()
+        dict_controller.append(new_dict)
 
     elif command == 'ROLLBACK':
-        count_transaction = 0
-        dict_controller = dict_controller[:2]
-        if len(dict_controller[-1]) == 0:
+        if count_transaction > 1:
+            count_transaction -= 1
             del dict_controller[-1]
+        elif count_transaction == 0:
+            print('No one transaction now. Try BEGIN for start it')
 
     elif command == 'COMMIT':
-        for key in dict_controller[-1].keys():
-            my_bd[key] = dict_controller[-1][key]
-            print(dict_controller)
-        dict_controller.clear()
-        dict_controller.append(my_bd)
-        print(my_bd)
+        while len(dict_controller) > 1:
+            my_bd.update(dict_controller[1])
+            del dict_controller[1]
 
     else:
         print('Wrong command! Use: SET, GET, UNSET, BEGIN, ROLLBACK, COMMIT, END')
