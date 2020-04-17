@@ -23,7 +23,8 @@ while True:
 
     elif command == 'GET':
         try:
-            print(current_dict[x.split(' ')[1]])
+            # print(current_dict[x.split(' ')[1]])
+            print(my_bd[x.split(' ')[1]])
         except KeyError:
             print('NULL')
         except IndexError:
@@ -39,7 +40,6 @@ while True:
 
     elif command == 'COUNTS':
         counter = 0
-        # for one_dict in dict_controller:
         try:
             for key, value in current_dict.items():
                 if value == x.split(' ')[1]:
