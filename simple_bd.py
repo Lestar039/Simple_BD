@@ -1,6 +1,6 @@
-my_bd = {}
+main_bd = {}
 count_transaction = 0
-dict_controller = [my_bd]
+dict_controller = [main_bd]
 
 while True:
     current_dict = dict_controller[-1]
@@ -18,33 +18,39 @@ while True:
 
     elif command == 'GET':
         try:
-            print(current_dict[x.split(' ')[1]])
-        except KeyError:
-            try:
-                print(my_bd[x.split(' ')[1]])
-            except KeyError:
+            for one_dict in reversed(dict_controller):
+                try:
+                    print(one_dict[x.split(' ')[1]])
+                    break
+                except KeyError:
+                    pass
+            else:
                 print('NULL')
         except IndexError:
             print('Wrong command! Use: GET VALUE')
 
     elif command == 'UNSET':
         try:
-            del current_dict[x.split(' ')[1]]
+            for one_dict in reversed(dict_controller):
+                try:
+                    del one_dict[x.split(' ')[1]]
+                    break
+                except KeyError:
+                    pass
         except KeyError:
-            try:
-                del my_bd[x.split(' ')[1]]
-            except IndexError:
-                pass
+            pass
         except IndexError:
             print('Wrong command! Use: UNSET KEY')
 
     elif command == 'COUNTS':
         counter = 0
         try:
-            for key, value in my_bd.items():
-                if value == x.split(' ')[1]:
-                    counter += 1
-            print(counter)
+            for one_dict in dict_controller:
+                for key, value in main_bd.items():
+                    if value == x.split(' ')[1]:
+                        counter += 1
+                print(counter)
+                break
         except IndexError:
             print('Wrong command! Use: COUNTS VALUE')
 
@@ -62,7 +68,7 @@ while True:
 
     elif command == 'COMMIT':
         while len(dict_controller) > 1:
-            my_bd.update(dict_controller[1])
+            main_bd.update(dict_controller[1])
             del dict_controller[1]
         count_transaction = 0
 
