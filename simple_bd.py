@@ -15,6 +15,7 @@ while True:
             current_dict[x.split(' ')[1]] = x.split(' ')[2]
         except IndexError:
             print('Wrong command! Use: SET KEY VALUE')
+        print(dict_controller)
 
     elif command == 'GET':
         try:
@@ -45,12 +46,12 @@ while True:
     elif command == 'COUNTS':
         counter = 0
         try:
-            for one_dict in dict_controller:
-                for key, value in main_bd.items():
+            for one_dict in reversed(dict_controller):
+                for key, value in one_dict.items():
                     if value == x.split(' ')[1]:
                         counter += 1
-                print(counter)
-                break
+            print(counter)
+
         except IndexError:
             print('Wrong command! Use: COUNTS VALUE')
 
